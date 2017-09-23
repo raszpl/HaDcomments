@@ -25,5 +25,8 @@ Hackaday comment system enthancement userscript I wrote couple of years ago. At 
 ![panel](https://raw.github.com/raszpl/HaDcomments/master/history.png)
 
 
+- Gets rid of sidebar and resizes content to full width of the screen.
+
+
 Designed and tested on Opera 12.x (native userjs) and Chrome/Vivaldi/Opera using Tampermonkey.
 Uses localStorage to store "URL" = "newest comment timestamp, comments last seen, my comments, check date, unread comments, unread replies to my comments" key/value pair.
