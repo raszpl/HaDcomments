@@ -80,22 +80,18 @@ window.addEventListener("load", function (e){
   theForm.name = "theForm";
   theForm.id = "theForm";
   theForm.innerHTML = [
-    "<button id='bfilltheData' class='btn'>history</button>",
+    "<button id='bfilltheData' class='btn' value='0'>history</button>",
     "<label><input type='checkbox' checked='checked' id='scope1' /> mine </label>",
-    "<input type='range' id='range1' value='10' min='0' max='"+localStorage.length+"' /><label id='range2'> 10 </label>"
-    // unused at this time, I had some plans for bulk updating of counters, but its not exactly on the top of my todo list
-    //      ,
-    //      "<button id='bloadtheData' class='btn'>update</button>",
-    //      "<label><input type='checkbox' id='scope2' /> all </label>",
-    //      "<button id='brefactorData' class='btn'> __ </button>"
+    "<input type='range' id='range1' value='10' min='1' max='"+localStorage.length+"' /><label id='range2'> 10 </label>",
+    "<button id='bupdatevisibleData' class='btn'>update</button>"
   ].join('');
   document.getElementById("masthead").children[0].appendChild(theForm);
 
-  bfilltheData.onclick = function(){ bfilltheData.value ^= true; filltheData(); return false; };
+  bfilltheData.onclick = function(){ bfilltheData.value ^= 1; filltheData(); return false; };
   scope1.onclick = function(){ filltheData(); };
-  range1.onmousemove = function(){ range2.innerHTML = range1.value +" "; };
+  range1.onmousemove = function(){ range2.innerHTML = " "+ range1.value +" "; };
   range1.onmouseup = function(){ filltheData(); };
-  //  bloadtheData.onclick = function(){ loadtheData(); return false; };
+  bupdatevisibleData.onclick = function(){ filltheData(1); return false; };
   //  brefactorData.onclick = function(){ refactorData(); return false; };
 
   if (typeof(Storage) != "undefined")
@@ -188,7 +184,7 @@ window.addEventListener("load", function (e){
             var font= document.createElement("a");
             font.setAttribute('style', 'color:red; text-align: right; width:50%; display:inline-block;');
             font.textContent = "Next unread";
-            font.href = nextcommenthash;
+            font.href = location.href.replace(location.hash,"") +"#"+nextcommenthash;
             // OPTIONAL: document.body.scrollTop -= 200 lets me scroll a little bit down instead of sliding to top of hash
             font.setAttribute('next-unread', nextcommenthash);
             font.onclick = function() {window.location.hash = this.getAttribute('next-unread'); document.body.scrollTop -= 200; return false; };
@@ -212,8 +208,7 @@ window.addEventListener("load", function (e){
   }
 }, false);
 
-function filltheData() {
-  var start = new Date().getTime();
+function filltheData(update) {
   var logit = [];
   var line = 0;
   var now = parseInt(Date.parse(Date())/10000);
@@ -252,10 +247,28 @@ function filltheData() {
 
   if (document.getElementById("theDataTable"))
   {
-    document.getElementById("theDataTable").parentNode.removeChild(document.getElementById("theDataTable"));
+    if (!update)
+    {
+      document.getElementById("theDataTable").parentNode.removeChild(document.getElementById("theDataTable"));
+    }
+    else
+    {
+      var i = document.getElementById("theDataTable").rows.length;
+      while(i-- >1)
+      {
+        //only update older than 60 minutes
+        if (!document.getElementById("theDataTable").rows[i].childNodes[4].textContent.includes("min.") && !document.getElementById("theDataTable").rows[i].childNodes[4].textContent.includes("now"))
+        {
+          updaterow(i);
+          console.log(document.getElementById("theDataTable").rows[i].childNodes[4].textContent);
+        }
+      }
+
+      return;
+    }
   }
 
-  if (document.getElementById('bfilltheData').value == true)
+  if (document.getElementById('bfilltheData').value === "1")
   {
     var tbl = document.createElement('table');
     tbl.id = "theDataTable";
@@ -264,7 +277,7 @@ function filltheData() {
     var tr = document.createElement('tr');
     tr.innerHTML = "<tr><td><a></a></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>";
 
-    for (i = localStorage.length-1; i > localStorage.length-1-range; i--)
+    for (var i = localStorage.length-1; i >-1; i--)
     {
       var url = localStorage.key(i);
       var data_to_insert = getcomment(url);
@@ -297,23 +310,29 @@ function filltheData() {
 
       currenttr.childNodes[6].id = "thedata6_"+ line;
       currenttr.childNodes[6].textContent = data_to_insert[5];
+
+      if (line==range)
+      {
+        break;
+      }
     }
 
+    //manually force update when clicking inside "last check" column
     tbl.onclick = function(e) {
       if (e.target && e.target.cellIndex == 4 && e.target.parentNode.rowIndex >0)
       {
         updaterow(e.target.parentNode.rowIndex);
       }
     };
-    //highlight row selected for update
+    //highlight row under mouse
     tbl.onmouseover = function(e) {
-      if (e.target && e.target.cellIndex == 4 && e.target.parentNode.rowIndex >0)
+      if (e.target && e.target.parentNode.rowIndex >0)
       {
         e.target.parentNode.classList.add("your-selected");
       }
     };
     tbl.onmouseout = function(e) {
-      if (e.target && e.target.cellIndex == 4 && e.target.parentNode.rowIndex >0)
+      if (e.target && e.target.parentNode.rowIndex >0)
       {
         e.target.parentNode.classList.remove("your-selected");
       }
@@ -321,10 +340,6 @@ function filltheData() {
 
     document.getElementById("theData").appendChild(tbl);
   }
-
-  var end = new Date().getTime();
-  //console.log(end - start);
-  //alert(end - start);
 }
 
 function insidepost(hr, row, url) {
@@ -341,13 +356,9 @@ function insidepost(hr, row, url) {
   document.getElementById("thedata5_"+row).innerHTML = responsecomments - commentdata[1];
 
   return;
-
-  //alert( current_url+" "+comment_time_last+" "+list.length+" "+my_comments+" "+parseInt(Date.parse(Date())/10000));
-  //"url, comments last seen, all comments, my comments, check date, unread comments, unread replies to my comments"
-  //    setcomment(current_url, comment_time_last, list.length, my_comments, parseInt(Date.parse(Date())/10000), "0", "0");
 }
 
-function loadtheData() {
+function updatevisibleData() {
   var scope = document.getElementById("scope2").checked;
   //  var hr = new XMLHttpRequest();
   var now = parseInt(Date.parse(Date())/10000);
