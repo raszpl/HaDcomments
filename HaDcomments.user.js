@@ -1,6 +1,21 @@
 // ==UserScript==
+// @name         HaDcomments
+// @description  Comment system enthancement. Highlights new comments since last visit using red box, highlights own comments using green box.
+//               Gets rid of the sidebar, uses whole width of the screen for content, adds "history" button to preview all posts you read and commented on.
+//               History panel also lets you check for new comments without loading older posts.
+// @author       Rasz_pl
+// @version      0.19
+// @date         2018-04-09
+// @namespace    https://github.com/raszpl/HaDcomments
+// @contact      citizenr@gmail.com
+// @license      MIT; http://opensource.org/licenses/MIT
+// @homepageURL  https://github.com/raszpl/HaDcomments
+// @supportURL   https://github.com/raszpl/HaDcomments/issues
+// @downloadURL  https://github.com/raszpl/HaDcomments/raw/master/hackahackernews.user.js
+
+// ==UserScript==
 // @name        Hackahackaday
-// @version     0.18
+// @version     0.19
 // @author      Rasz_pl (citizenr@gmail.com)
 // @namespace
 // @description Comment system enthancement. Highlights new comments since last visit using red box, highlights own comments using green box.
