@@ -17,10 +17,12 @@ Hackaday comment system enthancement userscript I wrote couple of years ago. At 
 
 ![own comment](https://raw.github.com/raszpl/HaDcomments/master/comment3.png)
 
-- History panel lists previously read posts.
-- "mine" checkbox to filter only posts you commented in.
+- Yellow COMMENTS button next to Search opens Comments panel.
+- Comments panel lists previously read posts.
+- "mine" checkbox can filters for only posts you comment in(green rows).
 - Slider controls number of rows.
-- Clicking in "last check" column updates current number of comments using AJAX.
+- Clicking UPDATE fetches all currently displayed (and older than 60 minutes) comments using AJAX (careful, havent implemented throttling yet).
+- You can also manually force update selected row by clicking inside "last check" column.
 
 ![panel](https://raw.github.com/raszpl/HaDcomments/master/history.png)
 
