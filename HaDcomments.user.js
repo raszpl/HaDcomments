@@ -11,22 +11,12 @@
 // @license      MIT; http://opensource.org/licenses/MIT
 // @homepageURL  https://github.com/raszpl/HaDcomments
 // @supportURL   https://github.com/raszpl/HaDcomments/issues
-// @downloadURL  https://github.com/raszpl/HaDcomments/raw/master/hackahackernews.user.js
-
-// ==UserScript==
-// @name        Hackahackaday
-// @version     0.19
-// @author      Rasz_pl (citizenr@gmail.com)
-// @namespace
-// @description Comment system enthancement. Highlights new comments since last visit using red box, highlights own comments using green box.
-//              Gets rid of the sidebar, uses whole width of the screen for content, adds "history" button to preview all posts you read and commented on.
-//              History panel also lets you check for new comments without loading older posts.
+// @downloadURL  https://github.com/raszpl/HaDcomments/raw/master/HaDcomments.user.js
 // @include      http://hackaday.com/*
 // @include      https://hackaday.com/*
 // @grant        none
 // @run-at document-start
 // ==/UserScript==
-// Using localStorage to store "URL" = "read date, comments last seen, my comments, check date, unread comments, unread replies to my comments" key/value pair
 
 // lets load custom css
     css = '.widget-area {width: 20% !important;}';
@@ -438,7 +428,7 @@ function getcomment(url){
   }
 }
 
-
+// Using localStorage to store "URL" = "read date, comments last seen, my comments, check date, unread comments, unread replies to my comments" key/value pair
 function setcomment(url, latest_comment_date, number_of_comments_last_seen, did_I_comment, last_check, new_not_read, not_read_replies_to_me){
    //alert(url +" "+ latest_comment_date +" "+ number_of_comments_last_seen +" "+ did_I_comment +" "+ last_check +" "+ new_not_read +" "+ not_read_replies_to_me);
   try
