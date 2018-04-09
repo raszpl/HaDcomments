@@ -80,7 +80,7 @@ window.addEventListener("load", function (e){
   theForm.name = "theForm";
   theForm.id = "theForm";
   theForm.innerHTML = [
-    "<button id='bfilltheData' class='btn' value='0'>history</button>",
+    "<button id='bfilltheData' class='btn' value='0'>comments</button>",
     "<label><input type='checkbox' checked='checked' id='scope1' /> mine </label>",
     "<input type='range' id='range1' value='10' min='1' max='"+localStorage.length+"' /><label id='range2'> 10 </label>",
     "<button id='bupdatevisibleData' class='btn'>update</button>"
